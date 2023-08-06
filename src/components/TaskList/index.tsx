@@ -116,9 +116,14 @@ export function TaskList() {
                   return (
                     <Draggable key={task.id} draggableId={task.id} index={index}>
                       {(provided) => (
-                        <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                        <div
+                          className="mb-2"
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                        >
                           <li
-                            className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down mb-2"
+                            className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down"
                           >
                             <TaskLabel
                               task={task}

@@ -1,4 +1,6 @@
 import { Plus, Trash } from "@phosphor-icons/react";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import { useWindowSize } from "react-use";
 
 import { type TaskLabelProps } from "./types";
 
@@ -10,6 +12,9 @@ export function TaskLabel({
   deleteTask,
   toggleAddSubtask,
 }: TaskLabelProps) {
+  const { width } = useWindowSize();
+  const isDesktop = width > 768;
+
   return (
     <div className="flex justify-between items-center w-[100%]">
       <div className="flex justify-center items-center">
@@ -40,6 +45,7 @@ export function TaskLabel({
         <button
           className="rounded-full bg-blue-400 p-2"
           aria-label="Add subtask"
+          data-tooltip-id="add-subtask"
           onClick={() => toggleAddSubtask(task.id)}
         >
           <Plus size={16} color="#fff" />
@@ -48,10 +54,27 @@ export function TaskLabel({
         <button
           className="rounded-full bg-red-400 p-2"
           aria-label="Delete task"
+          data-tooltip-id="delete-task"
           onClick={() => deleteTask(task.id)}
         >
           <Trash size={16} color="#fff" />
         </button>
+
+        {isDesktop && (
+          <>
+            <ReactTooltip
+              id="add-subtask"
+              place="top"
+              content={`Add to ${task.name} a subtask`}
+            />
+
+            <ReactTooltip
+              id="delete-task"
+              place="right"
+              content={`Delete ${task.name} task`}
+            />
+          </>
+        )}
       </div>
     </div>
   )
