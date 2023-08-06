@@ -12,6 +12,8 @@ export function TaskList() {
   const [taskName, setTaskName] = useState("");
   const [doneTasks, setDoneTasks] = useState<string[]>([]);
 
+  const tasksDone = `${doneTasks?.length} / ${tasks?.length}`;
+
   const addTask = useCallback(() => {
     setTasks((prev) => [...(prev ? prev : []), { name: taskName, id: nanoid() }]);
     setTaskName("");
@@ -54,6 +56,13 @@ export function TaskList() {
             )
           })}
         </ol>
+      )}
+
+      {tasks.length > 0 && (
+        <div className="flex content-end justify-end gap-1 mt-1">
+          <p>Tasks done:</p>
+          <strong>{tasksDone}</strong>
+        </div>
       )}
 
       <div className="flex gap-2 mt-4">
