@@ -2,11 +2,12 @@
 
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
-
-import { TaskLabel } from "../TaskLabel";
+import { DragDropContext, Draggable, Droppable, type DropResult } from 'react-beautiful-dnd';
 
 import { AddSubtaskModal } from "../AddSubtaskModal";
 import { SubtaskLabel } from "../SubtaskLabel";
+import { TaskLabel } from "../TaskLabel";
+
 import { type Subtask, type Task } from "./types";
 
 export function TaskList() {
@@ -55,6 +56,25 @@ export function TaskList() {
     setSubtasks(subtasks.filter((task) => task.id !== subtaskId))
   }
 
+  const onDragEnd = (result: DropResult) => {
+    const liArray = Array.from(document.querySelectorAll('li'));
+
+    liArray.forEach((li) => {
+      const newClassName = li.className
+        .split(' ')
+        .filter((cls) => !cls.includes('animate'))
+        .join(' ');
+
+      li.className = newClassName
+    });
+
+    const items = Array.from(tasks);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result?.destination?.index ?? 0, 0, reorderedItem);
+
+    setTasks(items);
+  }
+
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
@@ -78,52 +98,67 @@ export function TaskList() {
   return (
     <div>
       {!!tasks?.length && (
-        <ol className="flex gap-2 flex-col">
-          {tasks?.map((task) => {
-            const taskIsDone = doneTasks?.includes(task.id);
-            const filteredSubtasks = subtasks
-              ?.filter((subtask) => subtask.parent_task_id === task.id);
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="tasks">
+            {(provided) => (
+              <ul
+                className="flex flex-col"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {tasks?.map((task, index) => {
+                  const taskIsDone = doneTasks?.includes(task.id);
+                  const filteredSubtasks = subtasks
+                    ?.filter((subtask) => subtask.parent_task_id === task.id);
 
-            return (
-              <div key={task.id}>
-                <li
-                  className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down"
+                  return (
+                    <Draggable key={task.id} draggableId={task.id} index={index}>
+                      {(provided) => (
+                        <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                          <li
+                            className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down mb-2"
+                          >
+                            <TaskLabel
+                              task={task}
+                              taskIsDone={taskIsDone}
+                              doneTasks={doneTasks}
+                              setDoneTasks={setDoneTasks}
+                              deleteTask={deleteTask}
+                              toggleAddSubtask={toggleAddSubtask}
+                            />
+                          </li>
 
-                >
-                  <TaskLabel
-                    task={task}
-                    taskIsDone={taskIsDone}
-                    doneTasks={doneTasks}
-                    setDoneTasks={setDoneTasks}
-                    deleteTask={deleteTask}
-                    toggleAddSubtask={toggleAddSubtask}
-                  />
-                </li>
+                          <ol className="flex flex-col items-center justify-center">
+                            {filteredSubtasks?.map((subtask, index) => {
+                              const subtaskIsDone = doneSubtasks?.includes(subtask.id);
 
-                <ol className="flex flex-col items-center justify-center">
-                  {filteredSubtasks?.map((subtask, index) => {
-                    const subtaskIsDone = doneSubtasks?.includes(subtask.id);
+                              return (
+                                <li
+                                  key={subtask.id}
+                                  className={`w-[80%] bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${filteredSubtasks.length === 1 && 'rounded-b-md'} ${index > 0 && 'rounded-b-md'}`}
+                                >
+                                  <SubtaskLabel
+                                    subtask={subtask}
+                                    subtaskIsDone={subtaskIsDone}
+                                    doneSubtasks={doneSubtasks}
+                                    setDoneSubtasks={setDoneSubtasks}
+                                    deleteSubtask={deleteSubtask}
+                                  />
+                                </li>
+                              )
+                            })}
+                          </ol>
+                        </div>
+                      )}
+                    </Draggable>
+                  )
+                })}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-                    return (
-                      <li
-                        key={subtask.id}
-                        className={`w-[80%] bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${filteredSubtasks.length === 1 && 'rounded-b-md'} ${index > 0 && 'rounded-b-md'}`}
-                      >
-                        <SubtaskLabel
-                          subtask={subtask}
-                          subtaskIsDone={subtaskIsDone}
-                          doneSubtasks={doneSubtasks}
-                          setDoneSubtasks={setDoneSubtasks}
-                          deleteSubtask={deleteSubtask}
-                        />
-                      </li>
-                    )
-                  })}
-                </ol>
-              </div>
-            )
-          })}
-        </ol>
       )}
 
       {tasks.length > 0 && (
