@@ -20,13 +20,22 @@ export function TaskList() {
   const [doneSubtasks, setDoneSubtasks] = useState<string[]>([]);
   const [openAddSubtask, setOpenAddSubtask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState('');
+  const [taskNameError, setTaskNameError] = useState(false);
+  const [subtaskNameError, setSubaskNameError] = useState(false);
 
   const tasksDone = `${doneTasks?.length} / ${tasks?.length}`;
   const allTasksDone = tasks?.length > 0 && tasks?.length === doneTasks?.length;
 
   const addTask = useCallback(() => {
+    if (!taskName?.trim()?.length) {
+      setTaskNameError(true);
+      return;
+    }
+
     setTasks((prev) => [...(prev ? prev : []), { name: taskName, id: nanoid() }]);
-    setTaskName("");
+
+    setTaskName('');
+    setTaskNameError(false);
   }, [taskName]);
 
   const deleteTask = (taskId: string) => {
@@ -41,6 +50,11 @@ export function TaskList() {
   }
 
   const addSubtask = useCallback(() => {
+    if (!subtaskName?.trim()?.length) {
+      setSubaskNameError(true);
+      return;
+    }
+
     setSubtasks((prev) => [
       ...(prev ? prev : []),
       {
@@ -183,10 +197,14 @@ export function TaskList() {
             value={taskName}
             onChange={(e) => {
               setTaskName(e.target.value);
+              setTaskNameError(false);
             }}
-            className="border-2 p-2"
+            className={`border-2 p-2 rounded-md ${taskNameError && 'border-red-500'}`}
+            placeholder="Task name *"
             autoFocus
           />
+
+          {taskNameError && <p className="text-red-500">Required field</p>}
         </div>
 
         <div className="min-w-[105px]">
@@ -206,6 +224,8 @@ export function TaskList() {
         addSubtask={addSubtask}
         open={openAddSubtask}
         onClose={() => setOpenAddSubtask(false)}
+        subtaskNameError={subtaskNameError}
+        setSubaskNameError={setSubaskNameError}
       />
 
       {allTasksDone && <Confetti />}

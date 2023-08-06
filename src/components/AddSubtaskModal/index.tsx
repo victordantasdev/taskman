@@ -8,6 +8,8 @@ export function AddSubtaskModal({
   onClose,
   setSubtaskName,
   addSubtask,
+  subtaskNameError,
+  setSubaskNameError,
 }: AddSubtaskModalProps) {
   return (
     <>
@@ -42,16 +44,21 @@ export function AddSubtaskModal({
                 </div>
 
                 <div
-                  className="w-full flex pl-6 pr-6"
+                  className="w-full flex flex-col pl-6 pr-6"
                 >
                   <input
                     type="text"
                     id="task-name"
                     value={subtaskName}
-                    onChange={(e) => setSubtaskName(e.target.value)}
-                    className='border-2 p-2 w-full'
+                    onChange={(e) => {
+                      setSubtaskName(e.target.value);
+                      setSubaskNameError(false);
+                    }}
+                    className={`border-2 p-2 rounded-md w-full ${subtaskNameError && 'border-red-500'}`}
+                    placeholder="Subtask name *"
                     autoFocus
                   />
+                  {subtaskNameError && <p className="text-red-500">Required field</p>}
                 </div>
 
                 <div className="flex items-center justify-end p-6 rounded-b">

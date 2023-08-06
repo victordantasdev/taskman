@@ -6,4 +6,6 @@ export type AddSubtaskModalProps = {
   onClose: () => void
   setSubtaskName: Dispatch<SetStateAction<string>>
   addSubtask: () => void
+  subtaskNameError: boolean
+  setSubaskNameError: Dispatch<SetStateAction<boolean>>
 }
