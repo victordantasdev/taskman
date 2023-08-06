@@ -14,7 +14,7 @@ export function AddSubtaskModal({
       {open && (
         <>
           <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none backdrop-blur-sm"
             onClick={(e) => {
               const isSafeArea = (e.target as Element).closest('[data-modal-safe-area="true"]');
 
@@ -26,7 +26,7 @@ export function AddSubtaskModal({
             <div className="relative w-[100%] pr-4 pl-4 my-6 mx-auto max-w-3xl">
               <div
                 data-modal-safe-area
-                className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+                className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none animate-fade animate-duration-300"
               >
                 <div className="flex items-start justify-between p-5 rounded-t">
                   <h3 className="text-3xl font-semibold">
