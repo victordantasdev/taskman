@@ -3,14 +3,14 @@
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useState } from "react";
 
-export type Task = {
-  id: string
-  name: string
-}
+import { TaskLabel } from "../TaskLabel";
+
+import { type Task } from "./types";
 
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskName, setTaskName] = useState("");
+  const [doneTasks, setDoneTasks] = useState<string[]>([]);
 
   const addTask = useCallback(() => {
     setTasks((prev) => [...(prev ? prev : []), { name: taskName, id: nanoid() }]);
@@ -37,12 +37,19 @@ export function TaskList() {
       {!!tasks?.length && (
         <ol className="flex gap-2 flex-col">
           {tasks?.map((task) => {
+            const taskIsDone = doneTasks?.includes(task.id);
+
             return (
               <li
                 className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down"
                 key={task.id}
               >
-                {task.name}
+                <TaskLabel
+                  task={task}
+                  taskIsDone={taskIsDone}
+                  doneTasks={doneTasks}
+                  setDoneTasks={setDoneTasks}
+                />
               </li>
             )
           })}
