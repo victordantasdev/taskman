@@ -19,6 +19,11 @@ export function TaskList() {
     setTaskName("");
   }, [taskName]);
 
+  const deleteTask = (taskId: string) => {
+    setTasks(tasks.filter((task) => task.id !== taskId))
+    setDoneTasks(doneTasks.filter((id) => id !== taskId))
+  }
+
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
@@ -51,6 +56,7 @@ export function TaskList() {
                   taskIsDone={taskIsDone}
                   doneTasks={doneTasks}
                   setDoneTasks={setDoneTasks}
+                  deleteTask={deleteTask}
                 />
               </li>
             )

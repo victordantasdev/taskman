@@ -6,4 +6,5 @@ export type TaskLabelProps = {
   taskIsDone: boolean
   doneTasks: string[]
   setDoneTasks: Dispatch<SetStateAction<string[]>>
+  deleteTask: (taskId: string) => void
 }
