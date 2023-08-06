@@ -1,4 +1,5 @@
 import { Trash } from "@phosphor-icons/react";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 import { type SubtaskProps } from "./types";
 
@@ -40,9 +41,16 @@ export function SubtaskLabel({
           className="rounded-full bg-red-400 p-2"
           aria-label="Delete task"
           onClick={() => deleteSubtask(subtask.id)}
+          data-tooltip-id={`delete-subtask-${subtask.id}`}
         >
           <Trash size={16} color="#fff" />
         </button>
+
+        <ReactTooltip
+          id={`delete-subtask-${subtask.id}`}
+          place="right"
+          content={`Delete ${subtask.name} subtask`}
+        />
       </div>
     </div>
   )

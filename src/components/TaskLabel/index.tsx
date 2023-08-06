@@ -45,7 +45,7 @@ export function TaskLabel({
         <button
           className="rounded-full bg-blue-400 p-2"
           aria-label="Add subtask"
-          data-tooltip-id="add-subtask"
+          data-tooltip-id={`add-subtask-${task.id}`}
           onClick={() => toggleAddSubtask(task.id)}
         >
           <Plus size={16} color="#fff" />
@@ -54,7 +54,7 @@ export function TaskLabel({
         <button
           className="rounded-full bg-red-400 p-2"
           aria-label="Delete task"
-          data-tooltip-id="delete-task"
+          data-tooltip-id={`delete-task-${task.id}`}
           onClick={() => deleteTask(task.id)}
         >
           <Trash size={16} color="#fff" />
@@ -63,13 +63,13 @@ export function TaskLabel({
         {isDesktop && (
           <>
             <ReactTooltip
-              id="add-subtask"
+              id={`add-subtask-${task.id}`}
               place="top"
               content={`Add to ${task.name} a subtask`}
             />
 
             <ReactTooltip
-              id="delete-task"
+              id={`delete-task-${task.id}`}
               place="right"
               content={`Delete ${task.name} task`}
             />
