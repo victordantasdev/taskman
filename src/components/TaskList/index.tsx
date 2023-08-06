@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable, type DropResult } from 'react-beautiful-dnd';
 
 import { AddSubtaskModal } from "../AddSubtaskModal";
+import { Confetti } from "../Confetti";
 import { SubtaskLabel } from "../SubtaskLabel";
 import { TaskLabel } from "../TaskLabel";
 
@@ -21,6 +22,7 @@ export function TaskList() {
   const [selectedTaskId, setSelectedTaskId] = useState('');
 
   const tasksDone = `${doneTasks?.length} / ${tasks?.length}`;
+  const allTasksDone = tasks?.length > 0 && tasks?.length === doneTasks?.length;
 
   const addTask = useCallback(() => {
     setTasks((prev) => [...(prev ? prev : []), { name: taskName, id: nanoid() }]);
@@ -200,6 +202,8 @@ export function TaskList() {
         open={openAddSubtask}
         onClose={() => setOpenAddSubtask(false)}
       />
+
+      {allTasksDone && <Confetti />}
     </div>
   )
 }
