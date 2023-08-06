@@ -1,4 +1,4 @@
-import { Trash } from "@phosphor-icons/react";
+import { Plus, Trash } from "@phosphor-icons/react";
 
 import { type TaskLabelProps } from "./types";
 
@@ -8,6 +8,7 @@ export function TaskLabel({
   doneTasks,
   setDoneTasks,
   deleteTask,
+  toggleAddSubtask,
 }: TaskLabelProps) {
   return (
     <div className="flex justify-between items-center w-[100%]">
@@ -36,6 +37,14 @@ export function TaskLabel({
       </div>
 
       <div className="flex gap-2">
+        <button
+          className="rounded-full bg-blue-400 p-2"
+          aria-label="Add subtask"
+          onClick={() => toggleAddSubtask(task.id)}
+        >
+          <Plus size={16} color="#fff" />
+        </button>
+
         <button
           className="rounded-full bg-red-400 p-2"
           aria-label="Delete task"

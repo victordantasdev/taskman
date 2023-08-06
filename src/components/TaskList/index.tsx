@@ -5,12 +5,19 @@ import { useCallback, useEffect, useState } from "react";
 
 import { TaskLabel } from "../TaskLabel";
 
-import { type Task } from "./types";
+import { AddSubtaskModal } from "../AddSubtaskModal";
+import { SubtaskLabel } from "../SubtaskLabel";
+import { type Subtask, type Task } from "./types";
 
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskName, setTaskName] = useState("");
   const [doneTasks, setDoneTasks] = useState<string[]>([]);
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+  const [subtaskName, setSubtaskName] = useState('');
+  const [doneSubtasks, setDoneSubtasks] = useState<string[]>([]);
+  const [openAddSubtask, setOpenAddSubtask] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState('');
 
   const tasksDone = `${doneTasks?.length} / ${tasks?.length}`;
 
@@ -20,15 +27,44 @@ export function TaskList() {
   }, [taskName]);
 
   const deleteTask = (taskId: string) => {
-    setTasks(tasks.filter((task) => task.id !== taskId))
-    setDoneTasks(doneTasks.filter((id) => id !== taskId))
+    setTasks(tasks.filter((task) => task.id !== taskId));
+    setDoneTasks(doneTasks.filter((id) => id !== taskId));
+    setSubtasks(subtasks.filter((subtask) => subtask.parent_task_id !== taskId));
+  }
+
+  const toggleAddSubtask = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    setOpenAddSubtask(true);
+  }
+
+  const addSubtask = useCallback(() => {
+    setSubtasks((prev) => [
+      ...(prev ? prev : []),
+      {
+        name: subtaskName,
+        id: nanoid(),
+        parent_task_id: selectedTaskId
+      }
+    ]);
+
+    setSubtaskName('');
+    setOpenAddSubtask(false);
+  }, [selectedTaskId, subtaskName]);
+
+  const deleteSubtask = (subtaskId: string) => {
+    setSubtasks(subtasks.filter((task) => task.id !== subtaskId))
   }
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        addTask();
+
+        if (openAddSubtask) {
+          addSubtask();
+        } else {
+          addTask();
+        }
       }
     };
 
@@ -37,7 +73,7 @@ export function TaskList() {
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [addTask]);
+  }, [addTask, openAddSubtask, addSubtask]);
 
   return (
     <div>
@@ -45,20 +81,46 @@ export function TaskList() {
         <ol className="flex gap-2 flex-col">
           {tasks?.map((task) => {
             const taskIsDone = doneTasks?.includes(task.id);
+            const filteredSubtasks = subtasks
+              ?.filter((subtask) => subtask.parent_task_id === task.id);
 
             return (
-              <li
-                className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down"
-                key={task.id}
-              >
-                <TaskLabel
-                  task={task}
-                  taskIsDone={taskIsDone}
-                  doneTasks={doneTasks}
-                  setDoneTasks={setDoneTasks}
-                  deleteTask={deleteTask}
-                />
-              </li>
+              <div key={task.id}>
+                <li
+                  className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down"
+
+                >
+                  <TaskLabel
+                    task={task}
+                    taskIsDone={taskIsDone}
+                    doneTasks={doneTasks}
+                    setDoneTasks={setDoneTasks}
+                    deleteTask={deleteTask}
+                    toggleAddSubtask={toggleAddSubtask}
+                  />
+                </li>
+
+                <ol className="flex flex-col items-center justify-center">
+                  {filteredSubtasks?.map((subtask, index) => {
+                    const subtaskIsDone = doneSubtasks?.includes(subtask.id);
+
+                    return (
+                      <li
+                        key={subtask.id}
+                        className={`w-[80%] bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${filteredSubtasks.length === 1 && 'rounded-b-md'} ${index > 0 && 'rounded-b-md'}`}
+                      >
+                        <SubtaskLabel
+                          subtask={subtask}
+                          subtaskIsDone={subtaskIsDone}
+                          doneSubtasks={doneSubtasks}
+                          setDoneSubtasks={setDoneSubtasks}
+                          deleteSubtask={deleteSubtask}
+                        />
+                      </li>
+                    )
+                  })}
+                </ol>
+              </div>
             )
           })}
         </ol>
@@ -95,6 +157,14 @@ export function TaskList() {
           </button>
         </div>
       </div>
+
+      <AddSubtaskModal
+        subtaskName={subtaskName}
+        setSubtaskName={setSubtaskName}
+        addSubtask={addSubtask}
+        open={openAddSubtask}
+        onClose={() => setOpenAddSubtask(false)}
+      />
     </div>
   )
 }

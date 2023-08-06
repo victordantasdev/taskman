@@ -7,4 +7,5 @@ export type TaskLabelProps = {
   doneTasks: string[]
   setDoneTasks: Dispatch<SetStateAction<string[]>>
   deleteTask: (taskId: string) => void
+  toggleAddSubtask: (taskId: string) => void
 }
