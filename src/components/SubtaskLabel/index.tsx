@@ -21,9 +21,13 @@ export function SubtaskLabel({
           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
           onChange={() => {
             if (subtaskIsDone) {
-              setDoneSubtasks(doneSubtasks?.filter((t) => t !== subtask.id))
+              const newDoneSubtasks = doneSubtasks?.filter((t) => t !== subtask.id);
+              localStorage.setItem('done-subtasks', JSON.stringify(newDoneSubtasks));
+              setDoneSubtasks(newDoneSubtasks);
             } else {
-              setDoneSubtasks([...doneSubtasks ? doneSubtasks : [], subtask.id])
+              const newDoneSubtasks = [...doneSubtasks ? doneSubtasks : [], subtask.id];
+              localStorage.setItem('done-subtasks', JSON.stringify(newDoneSubtasks));
+              setDoneSubtasks(newDoneSubtasks)
             }
           }}
         />

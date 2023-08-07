@@ -12,10 +12,22 @@ import { TaskLabel } from "../TaskLabel";
 import { type Subtask, type Task } from "./types";
 
 export function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const localStorageTasks = localStorage.getItem('tasks');
+  const parsedTasks = localStorageTasks ? JSON.parse(localStorageTasks) : [];
+
+  const localStorageDoneTasks = localStorage.getItem('done-tasks');
+  const parsedDoneTasks = localStorageDoneTasks ? JSON.parse(localStorageDoneTasks) : [];
+
+  const localStorageSubtasks = localStorage.getItem('subtasks');
+  const parsedSubtasks = localStorageSubtasks ? JSON.parse(localStorageSubtasks) : [];
+
+  const localStorageDoneSubtasks = localStorage.getItem('done-subtasks');
+  const parsedDoneSubtasks = localStorageDoneSubtasks ? JSON.parse(localStorageDoneSubtasks) : [];
+
+  const [tasks, setTasks] = useState<Task[]>(parsedTasks);
   const [taskName, setTaskName] = useState("");
-  const [doneTasks, setDoneTasks] = useState<string[]>([]);
-  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+  const [doneTasks, setDoneTasks] = useState<string[]>(parsedDoneTasks);
+  const [subtasks, setSubtasks] = useState<Subtask[]>(parsedSubtasks);
   const [subtaskName, setSubtaskName] = useState('');
   const [doneSubtasks, setDoneSubtasks] = useState<string[]>([]);
   const [openAddSubtask, setOpenAddSubtask] = useState(false);
@@ -32,16 +44,32 @@ export function TaskList() {
       return;
     }
 
-    setTasks((prev) => [...(prev ? prev : []), { name: taskName, id: nanoid() }]);
+    setTasks((prev) => {
+      const newState = [...(prev ? prev : []), { name: taskName, id: nanoid() }];
+      localStorage.setItem('tasks', JSON.stringify(newState));
+      return newState;
+    });
 
     setTaskName('');
     setTaskNameError(false);
   }, [taskName]);
 
   const deleteTask = (taskId: string) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
-    setDoneTasks(doneTasks.filter((id) => id !== taskId));
-    setSubtasks(subtasks.filter((subtask) => subtask.parent_task_id !== taskId));
+    const filteredTasks = tasks.filter((task) => task.id !== taskId);
+    const filteredDoneTasks = doneTasks.filter((id) => id !== taskId);
+    const filteredSubtasks = subtasks.filter((subtask) => subtask.parent_task_id !== taskId);
+    const subtasksIds = filteredTasks.map((subtask) => subtask.id)
+    const filteredDoneSubtasks = doneSubtasks.filter((id) => !subtasksIds.includes(id))
+
+    localStorage.setItem('tasks', JSON.stringify(filteredTasks));
+    localStorage.setItem('done-tasks', JSON.stringify(filteredDoneTasks));
+    localStorage.setItem('subtasks', JSON.stringify(filteredDoneTasks));
+    localStorage.setItem('done-subtasks', JSON.stringify(filteredDoneSubtasks));
+
+    setTasks(filteredTasks);
+    setDoneTasks(filteredDoneTasks);
+    setSubtasks(filteredSubtasks);
+    setDoneSubtasks(filteredDoneSubtasks);
   }
 
   const toggleAddSubtask = (taskId: string) => {
@@ -55,21 +83,28 @@ export function TaskList() {
       return;
     }
 
-    setSubtasks((prev) => [
-      ...(prev ? prev : []),
-      {
-        name: subtaskName,
-        id: nanoid(),
-        parent_task_id: selectedTaskId
-      }
-    ]);
+    setSubtasks((prev) => {
+      const newState = [
+        ...(prev ? prev : []),
+        {
+          name: subtaskName,
+          id: nanoid(),
+          parent_task_id: selectedTaskId
+        }
+      ];
+
+      localStorage.setItem('subtasks', JSON.stringify(newState));
+      return newState;
+    });
 
     setSubtaskName('');
     setOpenAddSubtask(false);
   }, [selectedTaskId, subtaskName]);
 
   const deleteSubtask = (subtaskId: string) => {
-    setSubtasks(subtasks.filter((task) => task.id !== subtaskId))
+    const filteredSubtasks = subtasks.filter((task) => task.id !== subtaskId);
+    localStorage.setItem('subtasks', JSON.stringify(filteredSubtasks))
+    setSubtasks(filteredSubtasks);
   }
 
   const onDragEnd = (result: DropResult) => {
