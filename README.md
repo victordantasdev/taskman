@@ -23,7 +23,7 @@ Before you begin, ensure that you have the following installed on your machine:
 1 - Clone the TaskMan repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/taskman.git
+git clone https://github.com/victordantasdev/taskman.git
 cd taskman
 ```
 2 - Install the project dependencies using npm:
