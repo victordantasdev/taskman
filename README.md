@@ -1,34 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TaskMan - Simple Task Manager
+
+TaskMan is a lightweight and user-friendly task manager built using Next.js and TypeScript. With TaskMan, you can effortlessly create tasks and subtasks, reorder them using drag and drop functionality, and delete tasks as needed. The application also ensures that all your task states are automatically saved to the browser's local storage, so even if you reload the page, you won't lose any of your tasks.
+
+<img src="https://github.com/victordantasdev/taskman/assets/64330605/0242ac73-2904-453d-8174-d5bb8df33f21" width="100%" />
+
+## Features
+- Create tasks and subtasks.
+- Reorder tasks and subtasks using drag and drop.
+- Delete tasks and subtasks.
+- Automatic state persistence using local storage.
 
 ## Getting Started
 
-First, run the development server:
+To get started with TaskMan, follow the steps below:
+
+### Prerequisites
+Before you begin, ensure that you have the following installed on your machine:
+- Node.js: https://nodejs.org
+- npm (Node Package Manager): This comes bundled with Node.js.
+
+### Installation
+1 - Clone the TaskMan repository to your local machine:
+
+```bash
+git clone https://github.com/your-username/taskman.git
+cd taskman
+```
+2 - Install the project dependencies using npm:
+```bash
+npm install
+```
+
+### Running the Application
+Now that the dependencies are installed, you can run the TaskMan application locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the development server, and you can access TaskMan by navigating to http://localhost:3000 in your web browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
+- To create a new task, type a task name and click on the "Add Task" button or press Enter key.
+- To create a subtask, click on the "Add Subtask" button within the parent task and enter the subtask details then click on "add" button or press Enter.
+- You can reorder tasks and subtasks by dragging and dropping them to the desired position.
+- To delete a task or subtask, click on the delete icon (trash can) next to the task/subtask.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Data Persistence
+TaskMan automatically saves your tasks and subtasks to the browser's local storage. This means that even if you reload the page or close the browser, your tasks will be preserved.
 
-## Learn More
+## Technologies Used
+- Next.js: https://nextjs.org
+- TypeScript: https://www.typescriptlang.org
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
+Contributions to TaskMan are welcome! If you find any bugs, have suggestions for new features, or want to improve the code, feel free to open an issue or submit a pull request on the GitHub repository.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
+TaskMan is open-source software licensed under the MIT License.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Acknowledgments
+TaskMan was created with the support of the open-source community and the following resources:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Next.js Documentation]('https://nextjs.org/docs')
+- [TypeScript Documentation]('https://www.typescriptlang.org/docs')
+- [react-beautiful-dnd (rbd) Documentation]('https://github.com/atlassian/react-beautiful-dnd')
