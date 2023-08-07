@@ -202,7 +202,7 @@ export function TaskList() {
                               return (
                                 <li
                                   key={subtask.id}
-                                  className={`w-[80%] bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${filteredSubtasks.length === 1 && 'rounded-b-md'} ${index > 0 && 'rounded-b-md'}`}
+                                  className={`w-[80%] bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${index === filteredSubtasks.length - 1 && 'rounded-b-md'}`}
                                 >
                                   <SubtaskLabel
                                     subtask={subtask}
