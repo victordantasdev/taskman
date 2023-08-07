@@ -183,7 +183,7 @@ export function TaskList() {
                           ref={provided.innerRef}
                         >
                           <li
-                            className="bg-neutral-50 border-2 flex gap-1 p-2 items-center content-center shadow-sm rounded-md z-auto animate-fade-down"
+                            className="bg-neutral-50 flex gap-1 p-2 items-center content-center shadow-md z-40 relative rounded-md animate-fade-down"
                           >
                             <TaskLabel
                               task={task}
@@ -202,7 +202,7 @@ export function TaskList() {
                               return (
                                 <li
                                   key={subtask.id}
-                                  className={`w-[80%] bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${index === filteredSubtasks.length - 1 && 'rounded-b-md'}`}
+                                  className={`w-[80%] z-0 bg-white border-b-2 border-r-2 border-l-2 flex gap-1 p-2 items-center content-center shadow-sm animate-fade-down ${index === filteredSubtasks.length - 1 && 'rounded-b-md'}`}
                                 >
                                   <SubtaskLabel
                                     subtask={subtask}
