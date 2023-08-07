@@ -134,6 +134,7 @@ export function TaskList() {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result?.destination?.index ?? 0, 0, reorderedItem);
 
+    localStorage.setItem('tasks', JSON.stringify(items));
     setTasks(items);
   }
 
