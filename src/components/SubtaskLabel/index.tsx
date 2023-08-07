@@ -1,3 +1,5 @@
+'use client'
+
 import { Trash } from "@phosphor-icons/react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 

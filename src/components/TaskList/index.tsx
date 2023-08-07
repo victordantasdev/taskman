@@ -12,28 +12,39 @@ import { TaskLabel } from "../TaskLabel";
 import { type Subtask, type Task } from "./types";
 
 export function TaskList() {
-  const localStorageTasks = localStorage.getItem('tasks');
-  const parsedTasks = localStorageTasks ? JSON.parse(localStorageTasks) : [];
 
-  const localStorageDoneTasks = localStorage.getItem('done-tasks');
-  const parsedDoneTasks = localStorageDoneTasks ? JSON.parse(localStorageDoneTasks) : [];
 
-  const localStorageSubtasks = localStorage.getItem('subtasks');
-  const parsedSubtasks = localStorageSubtasks ? JSON.parse(localStorageSubtasks) : [];
-
-  const localStorageDoneSubtasks = localStorage.getItem('done-subtasks');
-  const parsedDoneSubtasks = localStorageDoneSubtasks ? JSON.parse(localStorageDoneSubtasks) : [];
-
-  const [tasks, setTasks] = useState<Task[]>(parsedTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [taskName, setTaskName] = useState("");
-  const [doneTasks, setDoneTasks] = useState<string[]>(parsedDoneTasks);
-  const [subtasks, setSubtasks] = useState<Subtask[]>(parsedSubtasks);
+  const [doneTasks, setDoneTasks] = useState<string[]>([]);
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
   const [subtaskName, setSubtaskName] = useState('');
   const [doneSubtasks, setDoneSubtasks] = useState<string[]>([]);
   const [openAddSubtask, setOpenAddSubtask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [taskNameError, setTaskNameError] = useState(false);
   const [subtaskNameError, setSubaskNameError] = useState(false);
+
+  useEffect(() => {
+    if (window !== undefined) {
+      const localStorageTasks = localStorage.getItem('tasks');
+      const parsedTasks = localStorageTasks ? JSON.parse(localStorageTasks) : [];
+
+      const localStorageDoneTasks = localStorage.getItem('done-tasks');
+      const parsedDoneTasks = localStorageDoneTasks ? JSON.parse(localStorageDoneTasks) : [];
+
+      const localStorageSubtasks = localStorage.getItem('subtasks');
+      const parsedSubtasks = localStorageSubtasks ? JSON.parse(localStorageSubtasks) : [];
+
+      const localStorageDoneSubtasks = localStorage.getItem('done-subtasks');
+      const parsedDoneSubtasks = localStorageDoneSubtasks ? JSON.parse(localStorageDoneSubtasks) : [];
+
+      setTasks(parsedTasks);
+      setDoneTasks(parsedDoneTasks);
+      setSubtasks(parsedSubtasks);
+      setDoneSubtasks(parsedDoneSubtasks);
+    }
+  }, []);
 
   const tasksDone = `${doneTasks?.length} / ${tasks?.length}`;
   const allTasksDone = tasks?.length > 0 && tasks?.length === doneTasks?.length;
