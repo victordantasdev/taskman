@@ -63,6 +63,7 @@ TaskMan is open-source software licensed under the MIT License.
 TaskMan was created with the support of the open-source community and the following resources:
 
 - [Next.js Documentation]('https://nextjs.org/docs')
+- [Tailwind CSS Documentation]('https://tailwindcss.com/docs/installation')
 - [TypeScript Documentation]('https://www.typescriptlang.org/docs')
 - [react-beautiful-dnd (rbd) Documentation]('https://github.com/atlassian/react-beautiful-dnd')
 
@@ -72,4 +73,3 @@ TaskMan was created with the support of the open-source community and the follow
 |---|---|
 |Lighthouse on Mobile|![image](https://github.com/victordantasdev/taskman/assets/64330605/68563932-5388-45c8-8a63-3785a95d8031)
 |Lighthouse on Desktop|![image](https://github.com/victordantasdev/taskman/assets/64330605/a93e64a9-b149-413f-b9a7-b0e836ecf770)
-|Page load on slow 3g and no cache (10.63s)|![image](https://github.com/victordantasdev/taskman/assets/64330605/c88ccbfa-fb70-446f-b7c8-1ad74960f8cb)
